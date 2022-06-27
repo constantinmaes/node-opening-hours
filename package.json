@@ -1,7 +1,11 @@
 {
     "name": "node-opening-hours",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/constantinmaes/node-opening-hours.git"
+    },
     "main": "dist/index.js",
     "types" : "dist/index.d.ts",
     "type": "module",
@@ -12,7 +16,7 @@
     },
     "keywords": [],
     "author": "",
-    "license": "ISC",
+    "license": "MIT",
     "devDependencies": {
         "@types/luxon": "^2.3.2",
         "prettier": "^2.7.1",
