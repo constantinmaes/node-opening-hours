@@ -1,5 +1,5 @@
 import { DateTime, Duration, DurationUnit, Interval, Settings } from 'luxon';
-import { Day, daysArray } from './day.type.js';
+import { Day, daysArray } from './day.type';
 
 type OpeningHoursCreationDTO = {
     [key in Day]?: string[];

@@ -1,4 +1,4 @@
-import { OpeningHours } from './opening-hours.class.js';
+import { OpeningHours } from './opening-hours.class';
 
 const test = new OpeningHours();
 
