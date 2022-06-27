@@ -6,7 +6,8 @@
     "type": "module",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "tsc": "tsc -p tsconfig.json"
+        "build": "tsc -p tsconfig.json",
+        "make:docs": "typedoc --out docs src/index.ts --sort visibility --plugin typedoc-plugin-mdn-links"
     },
     "keywords": [],
     "author": "",
@@ -14,6 +15,8 @@
     "devDependencies": {
         "@types/luxon": "^2.3.2",
         "prettier": "^2.7.1",
+        "typedoc": "^0.22.17",
+        "typedoc-plugin-mdn-links": "^1.0.6",
         "typescript": "^4.7.4"
     },
     "dependencies": {
