@@ -76,7 +76,7 @@ Full docs to come.
 | forDate                | forDate               |           ✅ |      |
 
 
-#To do
+# To do
 
 * Implement exceptions
 * Handle schedules overflowing on the next day
