@@ -25,26 +25,52 @@ export class OpeningHours {
         this.setTimezone(timezone);
     }
 
+    /**
+     * Parses the opening hours data, merges overlapping ranges and constructs the object on which all methods operate.
+     * @param {OpeningHoursCreationDTO} data
+     * @param {string} timezone
+     */
     public create(data: OpeningHoursCreationDTO, timezone = 'utc') {
         this.setTimezone(timezone);
         this.fill(data);
     }
 
+    /**
+     * Returns the current opening time range if open, formatted as 'HH:mm-HH:mm', false otherwise
+     * @return {string | boolean}
+     */
     public currentOpenRange() {
         const range = this.getCurrentOpenRange();
         return range ? range.toISOTime().replace('/', '-') : false;
     }
 
+    /**
+     * Returns a Luxon datetime indicating the end of the current opening time if open, false otherwise
+     * @return {DateTime | boolean}
+     */
     public currentOpenRangeEnd(): DateTime | boolean {
         const range = this.getCurrentOpenRange();
         return range ? range.end : false;
     }
 
+    /**
+     * Returns a Luxon datetime indicating the start of the current opening time if open, false otherwise
+     * @return {DateTime | boolean}
+     */
     public currentOpenRangeStart(): DateTime | boolean {
         const range = this.getCurrentOpenRange();
         return range ? range.start : false;
     }
 
+    /**
+     * Computes the total amount of closed time between two dates and returns it as a Luxon Duration or a number if
+     * a unit is specified
+     * @param {Date} start A JS date indicating the starting datetime
+     * @param {Date} end A JS date indicating the ending datetime
+     * @param {DurationUnit} unit If present, will convert the amount of time in specified unit;
+     * return the underlying Luxon Duration otherwise
+     * @return {number | Duration}
+     */
     public diffInClosed(start: Date, end: Date, unit: DurationUnit) {
         const s = DateTime.fromJSDate(start);
         const sPlus1 = s.plus({ days: 1 }).startOf('day');
@@ -98,18 +124,45 @@ export class OpeningHours {
         return unit ? totalDuration.as(unit) : totalDuration;
     }
 
+    /**
+     * Computes the total amount of closed time between two dates in hours
+     * @param {Date} start A JS date indicating the starting datetime
+     * @param {Date} end A JS date indicating the ending datetime
+     * @return {Duration}
+     */
     public diffInClosedHours(start: Date, end: Date) {
         return this.diffInClosed(start, end, 'hours');
     }
 
+    /**
+     * Computes the total amount of closed time between two dates in minutes
+     * @param {Date} start A JS date indicating the starting datetime
+     * @param {Date} end A JS date indicating the ending datetime
+     * @return {Duration}
+     */
     public diffInClosedMinutes(start: Date, end: Date) {
         return this.diffInClosed(start, end, 'minutes');
     }
 
+    /**
+     * Computes the total amount of closed time between two dates in seconds
+     * @param {Date} start A JS date indicating the starting datetime
+     * @param {Date} end A JS date indicating the ending datetime
+     * @return {Duration}
+     */
     public diffInClosedSeconds(start: Date, end: Date) {
         return this.diffInClosed(start, end, 'seconds');
     }
 
+    /**
+     * Computes the total amount of opening time between two dates and returns it as a Luxon Duration or a number if
+     * a unit is specified
+     * @param {Date} start A JS date indicating the starting datetime
+     * @param {Date} end A JS date indicating the ending datetime
+     * @param {DurationUnit} unit If present, will convert the amount of time in specified unit;
+     * return the underlying Luxon Duration otherwise
+     * @return {number | Duration}
+     */
     public diffInOpen(start: Date, end: Date, unit: DurationUnit) {
         const s = DateTime.fromJSDate(start);
         const sPlus1 = s.plus({ days: 1 }).startOf('day');
@@ -156,18 +209,45 @@ export class OpeningHours {
         return unit ? totalDuration.as(unit) : totalDuration;
     }
 
+    /**
+     * Computes the total amount of open time between two dates in hours
+     * @param {Date} start A JS date indicating the starting datetime
+     * @param {Date} end A JS date indicating the ending datetime
+     * @return {Duration}
+     */
     public diffInOpenHours(start: Date, end: Date) {
         return this.diffInOpen(start, end, 'hours');
     }
 
+    /**
+     * Computes the total amount of open time between two dates in minutes
+     * @param {Date} start A JS date indicating the starting datetime
+     * @param {Date} end A JS date indicating the ending datetime
+     * @return {Duration}
+     */
     public diffInOpenMinutes(start: Date, end: Date) {
         return this.diffInOpen(start, end, 'minutes');
     }
 
+    /**
+     * Computes the total amount of open time between two dates in seconds
+     * @param {Date} start A JS date indicating the starting datetime
+     * @param {Date} end A JS date indicating the ending datetime
+     * @return {Duration}
+     */
     public diffInOpenSeconds(start: Date, end: Date) {
         return this.diffInOpen(start, end, 'seconds');
     }
 
+    /**
+     * Returns the opening time ranges for a given date. Returns false if there are no opening ranges on that date;
+     * Luxon Interval objects if humanize is false; array of strings formatted as 'HH:mm-HH:mm' if humanize is true
+     * (default).
+     * @param {Date | DateTime} d
+     * @param {boolean} humanize Defaults to true. Controls whether this function returns underlying Luxon Interval
+     * objects or human readable strings
+     * @return {string[] | Interval[] | boolean}
+     */
     public forDate(d: Date | DateTime, humanize = true) {
         const date = d instanceof Date ? DateTime.fromJSDate(d) : d;
         const day = date.weekdayLong.toLowerCase() as Day;
@@ -181,6 +261,15 @@ export class OpeningHours {
         }
     }
 
+    /**
+     * Returns the opening time ranges for a given day of the week. Returns false if there are no opening ranges on that
+     * date; Luxon Interval objects if humanize is false; array of strings formatted as 'HH:mm-HH:mm' if humanize is
+     * true (default).
+     * @param {Day} day
+     * @param {boolean} humanize Defaults to true. Controls whether this function returns underlying Luxon Interval
+     * objects or human readable strings
+     * @return {string[] | Interval[] | boolean}
+     */
     public forDay(day: Day, humanize = true) {
         const ranges = this.#openingHours[day];
         if (ranges.length > 0) {
@@ -192,18 +281,37 @@ export class OpeningHours {
         }
     }
 
+    /**
+     * Indicates whether business is currently closed.
+     * @return {Boolean}
+     */
     public isClosed(): Boolean {
         return !this.isOpen();
     }
 
+    /**
+     * Indicates whether business is closed for a given datetime.
+     * @param {Date} d
+     * @return {Boolean}
+     */
     public isClosedAt(d: Date): Boolean {
         return !this.isOpenAt(d);
     }
 
+    /**
+     * Indicates whether business is closed on a given day of the week (i.e. there are no opening ranges defined for
+     * that day).
+     * @param {Day} day
+     * @return {boolean}
+     */
     public isClosedOn(day: Day) {
         return !this.isOpenOn(day);
     }
 
+    /**
+     * Indicates whether business is currently open.
+     * @return {Boolean}
+     */
     public isOpen(): Boolean {
         const now = DateTime.now();
         const weekDay = now.weekdayLong.toLowerCase() as Day;
@@ -211,6 +319,11 @@ export class OpeningHours {
         return ranges.some((el) => el && el.contains(now));
     }
 
+    /**
+     * Indicates whether business is open at a given datetime.
+     * @param {Date} d
+     * @return {Boolean}
+     */
     public isOpenAt(d: Date): Boolean {
         const date = DateTime.fromJSDate(d);
         const weekDay = date.weekdayLong.toLowerCase() as Day;
@@ -225,13 +338,19 @@ export class OpeningHours {
         return ranges.some((el) => el && el.contains(date));
     }
 
+    /**
+     * Indicates whether business is open at a given day of the week (i.e. there are opening ranges defined for that
+     * day).
+     * @param {Day} day
+     * @return {boolean}
+     */
     public isOpenOn(day: Day) {
         return this.forDay(day) && this.forDay.length > 0;
     }
 
     /**
      * Returns the ending date time of the open interval that starts after
-     * provided Date
+     * provided Date, null if not found.
      * @param {Date} d
      * @return {DateTime | null}
      */
@@ -241,7 +360,7 @@ export class OpeningHours {
 
     /**
      * Returns the beginning date time of the open interval that starts after
-     * provided Date
+     * provided Date, null if not found.
      * @param {Date} d
      * @return {DateTime | null}
      */
@@ -249,14 +368,30 @@ export class OpeningHours {
         return this.getNextRangeLimit(d, 'start');
     }
 
+    /**
+     * Returns the end date time of the last open interval that ended before provided
+     * Date, null if not found.
+     * @param {Date} d
+     * @return {any}
+     */
     public previousClose(d: Date) {
         return this.getPreviousRangeLimit(d, 'end');
     }
 
+    /**
+     * Returns the start date time of the last open interval that ended before provided
+     * Date, null if not found.
+     * @param {Date} d
+     * @return {any}
+     */
     public previousOpen(d: Date) {
         return this.getPreviousRangeLimit(d, 'start');
     }
 
+    /**
+     * Returns a nicely formatted object with the opening hours schedule in human readable form.
+     * @return {{}}
+     */
     public toStructuredData() {
         const res = {};
         for (const day of Object.keys(this.#openingHours) as Day[]) {
