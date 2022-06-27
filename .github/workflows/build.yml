@@ -33,6 +33,7 @@ jobs:
       with:
         name: node-opening-hours-.${{ github.sha }}
         path: |
+          *
           !docs
           !src
           !.gitignore
