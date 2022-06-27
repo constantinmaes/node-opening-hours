@@ -35,7 +35,10 @@ jobs:
         path: |
           *
           !docs
+          !node_modules
           !src
+          !.git
+          !.github
           !.gitignore
           !.prettierrc
           !tsconfig.json
