@@ -1,13 +1,13 @@
 {
     "name": "node-opening-hours",
-    "version": "0.0.3",
+    "version": "0.0.2",
     "description": "",
     "repository": {
         "type": "git",
         "url": "https://github.com/constantinmaes/node-opening-hours.git"
     },
     "main": "dist/index.js",
-    "types": "dist/index.d.ts",
+    "types" : "dist/index.d.ts",
     "type": "module",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
