@@ -7,8 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v3
-      with:
-        name: node-opening-hours-${{ github.sha }}
+        with:
+          name: node-opening-hours-${{ github.sha }}
       - uses: actions/setup-node@v3
         with:
           node-version: '16.x'
