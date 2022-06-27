@@ -6,8 +6,10 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-       - uses: actions/checkout@v3
-       # Setup .npmrc file to publish to npm
+       - name: Download a single artifact
+       uses: actions/download-artifact@v3
+       with:
+         name: node-opening-hours-${{ github.sha }}
        - uses: actions/setup-node@v3
          with:
            node-version: '16.x'
