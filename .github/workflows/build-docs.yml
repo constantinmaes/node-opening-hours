@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Build docs
 on: [push]
 jobs:
     build-and-deploy:
@@ -13,5 +13,5 @@ jobs:
                   ACCESS_TOKEN: ${{ secrets.VUEPRESS_TOKEN }}
                   TARGET_REPO: constantinmaes/node-opening-hours
                   TARGET_BRANCH: main
-                  BUILD_SCRIPT: yarn && yarn build
+                  BUILD_SCRIPT: yarn && yarn docs:build
                   BUILD_DIR: docs/.vuepress/dist
